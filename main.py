@@ -30,3 +30,24 @@ fig = px.pie(
 )
 #the first three women to win
 first_thrd_women = df_women['full_name'].head(3)
+#check if there any people received a nobel prizes more than one
+winners=df['full_name'].value_counts()
+winners=winners[winners>1]
+print(f"People who received a Nobel Prize more than once:{winners}")
+catagories = df['category'].value_counts()
+print(f"Catagories of nobel prizes:{catagories}")
+#create a chart bar using plotly with the number of prizes awarded by category.
+v_bar=px.bar(
+    x=catagories.index,
+    y=catagories.values,
+    title='Nobel prizes by category',
+    color = catagories.values,
+    color_continuous_scale='Aggrnyl'
+)
+v_bar.update_layout(
+    xaxis_title='Category',
+    coloraxis_showscale=False,
+    yaxis_title='Number of prizes'
+)
+v_bar.write_image('images/num_prizes_awarded.png')
+v_bar.show()
