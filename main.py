@@ -161,3 +161,24 @@ def plot_map():
     )
     world_map.write_image('images/world_map.png')
     world_map.show()
+#total number of prizes awarded changed over the years.
+prize_by_year = df.groupby(by=['birth_country_current', 'year'], as_index=False).count()
+prize_by_year = prize_by_year.sort_values('year')[['year', 'birth_country_current', 'prize']]
+#reate a series that has the cumulative sum for the number of prizes won.
+cumulative_prizes = prize_by_year.groupby(by=['birth_country_current',
+                                              'year']).sum().groupby(level=[0]).cumsum()
+cumulative_prizes.reset_index(inplace=True)
+#plot the line chart
+def plot_line():
+    plt.figure(figsize=(8, 4), dpi=110)
+    line_chart = px.line(cumulative_prizes,
+                        x='year',
+                        y='prize',
+                        color='birth_country_current',
+                        title='Cumulative Number of Prizes Awarded by Country')
+
+    line_chart.update_layout(xaxis_title='Year',
+                             xaxis_range=[1901, 2020],
+                            yaxis_title='Number of Prizes')
+    line_chart.write_image('images/lines_chart.png')
+    line_chart.show()
