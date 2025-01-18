@@ -4,6 +4,7 @@ import plotly.express as px
 import seaborn as sns
 import numpy as np
 
+
 df=pd.read_csv('data/nobel_prize_data.csv')
 #convert birth_date column to panda datetime
 df['birth_date']=pd.to_datetime(df['birth_date'])
@@ -234,4 +235,22 @@ def plot_birth_city():
                                 yaxis_title='Birth City')
     birth_city_bar.write_image('images/birth_city_bar.png')
     birth_city_bar.show()
-plot_birth_city()
+#create a new dataframe of organization country and city and name with prize
+country_city_org = df.groupby(by=['organization_country', 
+                                       'organization_city', 
+                                       'organization_name'], as_index=False).agg({'prize': pd.Series.count})
+
+country_city_org.sort_values(by='prize', ascending=False, inplace=True)
+#create the sunburst chart
+def plot_sunburst():
+    sunburst_chart = px.sunburst(country_city_org,
+                                path=['organization_country',
+                                    'organization_city',
+                                    'organization_name'],
+                                values='prize',
+                                color='prize',
+                                color_continuous_scale='RdBu',
+                                title='Organizations by Country, City, and Name')
+    sunburst_chart.update_layout(coloraxis_showscale=True)
+    sunburst_chart.show()
+plot_sunburst()
