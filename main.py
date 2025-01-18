@@ -65,55 +65,79 @@ v_bar_split=px.bar(x=category_men_women.category,
 v_bar_split.update_layout(xaxis_title='Category'
                           ,yaxis_title='Number of Prizes')
 v_bar_split.write_image('images/num_prizes_awarded_split.png')
-
-#count how many prizes were awarded evry year
-df_clean_year=df['year'].value_counts()
-df_clean_year=df_clean_year.sort_index()
-#Create a 5 year rolling average of the number of prizes 
-moving_av_value=df_clean_year.rolling(window=5).mean()
-# Generate tick values for every 5 years from 1900 to 2020
-plt.figure(figsize=(8, 4), dpi=110)
-plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
-plt.yticks(fontsize=14)
-plt.xticks(ticks=np.arange(1900, 2021, step=5), 
-           rotation=45)
+def plot_prize_per_year():
+    #count how many prizes were awarded evry year
+    df_clean_year=df['year'].value_counts()
+    df_clean_year=df_clean_year.sort_index()
+    #Create a 5 year rolling average of the number of prizes 
+    moving_av_value=df_clean_year.rolling(window=5).mean()
+    # Generate tick values for every 5 years from 1900 to 2020
+    plt.figure(figsize=(8, 4), dpi=110)
+    plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
+    plt.yticks(fontsize=14)
+    plt.xticks(ticks=np.arange(1900, 2021, step=5), 
+            rotation=45)
+    
+    ax = plt.gca() # get current axis
+    ax.set_xlim(1900, 2020)
+    ax.scatter(x=df_clean_year.index, 
+            y=df_clean_year.values, 
+            c='dodgerblue', )
+    
+    ax.plot(df_clean_year.index, 
+            moving_av_value.values, 
+            c='crimson', 
+            )
+def plot_prize_avarage():
+    df_clean_year=df['year'].value_counts()
+    moving_av_value=df_clean_year.rolling(window=5).mean()
+    #Calculate the average prize share of the winners on a year by year basis.
+    df_avarage_year= df.groupby('year', as_index=False).agg({'share_pct':pd.Series.mean})
+    share_moving_average=df_avarage_year.rolling(window=5).mean()
+    #Create a line chart showing the average share of the winners on a year by year basis.
+    plt.figure(figsize=(8, 4), dpi=110)
+    plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
+    plt.yticks(fontsize=14)
+    plt.xticks(ticks=np.arange(1900, 2021, step=5), 
+            rotation=45)
+    
+    ax1 = plt.gca() # get current axis
+    ax2=ax1.twinx()
+    ax1.set_xlim(1900, 2020)
+    ax1.scatter(x=df_clean_year.index, 
+            y=df_clean_year.values, 
+            c='dodgerblue', )
+    
+    ax1.plot(df_clean_year.index, 
+            moving_av_value.values, 
+            c='crimson', 
+            )
+    #plot the share_pct
+    ax2.plot(df_avarage_year.year,
+            share_moving_average.share_pct,
+            c='black',)
+    plt.savefig('images/num_prizes_awarded_year.png')
+top_countries = df.groupby(['birth_country_current'], 
+                                  as_index=False).agg({'prize': pd.Series.count})
  
-ax = plt.gca() # get current axis
-ax.set_xlim(1900, 2020)
-ax.scatter(x=df_clean_year.index, 
-           y=df_clean_year.values, 
-           c='dodgerblue', )
- 
-ax.plot(df_clean_year.index, 
-        moving_av_value.values, 
-        c='crimson', 
-        )
-plt.savefig('images/num_prizes_awarded_year.png')
-
-#Calculate the average prize share of the winners on a year by year basis.
-df_avarage_year= df.groupby('year', as_index=False).agg({'share_pct':pd.Series.mean})
-share_moving_average=df_avarage_year.rolling(window=5).mean()
-#Create a line chart showing the average share of the winners on a year by year basis.
-plt.figure(figsize=(8, 4), dpi=110)
-plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
-plt.yticks(fontsize=14)
-plt.xticks(ticks=np.arange(1900, 2021, step=5), 
-           rotation=45)
- 
-ax1 = plt.gca() # get current axis
-ax2=ax1.twinx()
-ax1.set_xlim(1900, 2020)
-ax1.scatter(x=df_clean_year.index, 
-           y=df_clean_year.values, 
-           c='dodgerblue', )
- 
-ax1.plot(df_clean_year.index, 
-        moving_av_value.values, 
-        c='crimson', 
-        )
-#plot the share_pct
-ax2.plot(df_avarage_year.year,
-         share_moving_average.share_pct,
-         c='black',)
-plt.savefig('images/num_prizes_awarded_year.png')
-plt.show()
+top_countries.sort_values(by='prize', inplace=True)
+top20_countries = top_countries[-20:]
+#create a top 20 countries that awarded the prizes
+cat_country = df.groupby(['birth_country_current', 'category'], 
+                               as_index=False).agg({'prize': pd.Series.count})
+cat_country.sort_values(by='prize', ascending=False, inplace=True)
+merged_df = pd.merge(cat_country, top20_countries, on='birth_country_current')
+# change column names
+merged_df.columns = ['birth_country_current', 'category', 'cat_prize', 'total_prize'] 
+merged_df.sort_values(by='total_prize', inplace=True)
+def plot_top20_countries():
+    cat_cntry_bar = px.bar(x=merged_df.cat_prize,
+                        y=merged_df.birth_country_current,
+                        color=merged_df.category,
+                        orientation='h',
+                        title='Top 20 Countries by Number of Prizes and Category')
+    
+    cat_cntry_bar.update_layout(xaxis_title='Number of Prizes', 
+                                yaxis_title='Country')
+    cat_cntry_bar.write_image('images/top20_countries.png')
+    cat_cntry_bar.show()
