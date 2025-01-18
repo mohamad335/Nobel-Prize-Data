@@ -141,3 +141,23 @@ def plot_top20_countries():
                                 yaxis_title='Country')
     cat_cntry_bar.write_image('images/top20_countries.png')
     cat_cntry_bar.show()
+#create new dataframe that take the location with birth_country_current
+df_countries = df.groupby(['birth_country_current', 'ISO'], 
+                               as_index=False).agg({'prize': pd.Series.count})
+df_countries.sort_values('prize', ascending=False)
+#plot the map by plotly
+def plot_map():
+    world_map = px.choropleth(df_countries,
+                            locations='ISO',
+                            color='prize', 
+                            hover_name='birth_country_current', 
+                            color_continuous_scale=px.colors.sequential.matter)
+    
+    world_map.update_layout(coloraxis_showscale=True,)
+    world_map.update_layout(
+        title_text='Nobel Prizes Awarded by Country',
+        title_x=0.5,
+        title_font=dict(size=24),
+    )
+    world_map.write_image('images/world_map.png')
+    world_map.show()
