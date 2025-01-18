@@ -89,4 +89,31 @@ ax.plot(df_clean_year.index,
         c='crimson', 
         )
 plt.savefig('images/num_prizes_awarded_year.png')
+
+#Calculate the average prize share of the winners on a year by year basis.
+df_avarage_year= df.groupby('year', as_index=False).agg({'share_pct':pd.Series.mean})
+share_moving_average=df_avarage_year.rolling(window=5).mean()
+#Create a line chart showing the average share of the winners on a year by year basis.
+plt.figure(figsize=(8, 4), dpi=110)
+plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
+plt.yticks(fontsize=14)
+plt.xticks(ticks=np.arange(1900, 2021, step=5), 
+           rotation=45)
+ 
+ax1 = plt.gca() # get current axis
+ax2=ax1.twinx()
+ax1.set_xlim(1900, 2020)
+ax1.scatter(x=df_clean_year.index, 
+           y=df_clean_year.values, 
+           c='dodgerblue', )
+ 
+ax1.plot(df_clean_year.index, 
+        moving_av_value.values, 
+        c='crimson', 
+        )
+#plot the share_pct
+ax2.plot(df_avarage_year.year,
+         share_moving_average.share_pct,
+         c='black',)
+plt.savefig('images/num_prizes_awarded_year.png')
 plt.show()
