@@ -199,4 +199,21 @@ def plot_orgs():
                             yaxis_title='Organization')
     orgs_bar.write_image('images/orgs_bar.png')
     orgs_bar.show()
-plot_orgs()
+#top 20 oragnizations cities
+orgs_city = df.groupby(['organization_city'],
+                        as_index=False).agg({'prize': pd.Series.count})
+orgs_city.sort_values(by='prize', inplace=True)
+orgs_city_top20 = orgs_city[-20:]
+def plot_orgs_city():
+    orgs_city_bar = px.bar(orgs_city_top20,
+                            x=orgs_city_top20.prize,
+                            y=orgs_city_top20.organization_city,
+                            orientation='h',
+                            color=orgs_city_top20.prize,
+                            title='Top 20 Organization Cities by Number of Prizes')
+
+    orgs_city_bar.update_layout(xaxis_title='Number of Prizes',
+                                yaxis_title='Organization City')
+    orgs_city_bar.write_image('images/orgs_city_bar.png')
+    orgs_city_bar.show()
+plot_orgs_city()
