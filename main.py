@@ -65,6 +65,28 @@ v_bar_split=px.bar(x=category_men_women.category,
 v_bar_split.update_layout(xaxis_title='Category'
                           ,yaxis_title='Number of Prizes')
 v_bar_split.write_image('images/num_prizes_awarded_split.png')
-v_bar_split.show()
 
-
+#count how many prizes were awarded evry year
+df_clean_year=df['year'].value_counts()
+df_clean_year=df_clean_year.sort_index()
+#Create a 5 year rolling average of the number of prizes 
+moving_av_value=df_clean_year.rolling(window=5).mean()
+# Generate tick values for every 5 years from 1900 to 2020
+plt.figure(figsize=(8, 4), dpi=110)
+plt.title('Number of Nobel Prizes Awarded per Year', fontsize=18)
+plt.yticks(fontsize=14)
+plt.xticks(ticks=np.arange(1900, 2021, step=5), 
+           rotation=45)
+ 
+ax = plt.gca() # get current axis
+ax.set_xlim(1900, 2020)
+ax.scatter(x=df_clean_year.index, 
+           y=df_clean_year.values, 
+           c='dodgerblue', )
+ 
+ax.plot(df_clean_year.index, 
+        moving_av_value.values, 
+        c='crimson', 
+        )
+plt.savefig('images/num_prizes_awarded_year.png')
+plt.show()
