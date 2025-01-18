@@ -216,4 +216,22 @@ def plot_orgs_city():
                                 yaxis_title='Organization City')
     orgs_city_bar.write_image('images/orgs_city_bar.png')
     orgs_city_bar.show()
-plot_orgs_city()
+#Create a plotly bar chart graphing the top 20 birth cities of Nobel laureates
+birth_city = df.groupby(['birth_city'],
+                        as_index=False).agg({'prize': pd.Series.count})
+
+birth_city.sort_values(by='prize', inplace=True)
+birth_city_top20 = birth_city[-20:]
+def plot_birth_city():
+    birth_city_bar = px.bar(birth_city_top20,
+                            x=birth_city_top20.prize,
+                            y=birth_city_top20.birth_city,
+                            orientation='h',
+                            color=birth_city_top20.prize,
+                            title='Top 20 Birth Cities by Number of Prizes')
+
+    birth_city_bar.update_layout(xaxis_title='Number of Prizes',
+                                yaxis_title='Birth City')
+    birth_city_bar.write_image('images/birth_city_bar.png')
+    birth_city_bar.show()
+plot_birth_city()
