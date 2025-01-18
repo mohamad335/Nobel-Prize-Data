@@ -182,3 +182,21 @@ def plot_line():
                             yaxis_title='Number of Prizes')
     line_chart.write_image('images/lines_chart.png')
     line_chart.show()
+#organisations affiliated with the Nobel laureates
+orgs = df.groupby(['organization_name'],
+                    as_index=False).agg({'prize': pd.Series.count})
+orgs.sort_values(by='prize', inplace=True)
+orgs_top20 = orgs[-20:]
+def plot_orgs():
+    orgs_bar = px.bar(orgs_top20,
+                    x=orgs_top20.prize,
+                    y=orgs_top20.organization_name,
+                    orientation='h',
+                    color=orgs_top20.prize,
+                    title='Top 20 Organizations by Number of Prizes')
+
+    orgs_bar.update_layout(xaxis_title='Number of Prizes',
+                            yaxis_title='Organization')
+    orgs_bar.write_image('images/orgs_bar.png')
+    orgs_bar.show()
+plot_orgs()
