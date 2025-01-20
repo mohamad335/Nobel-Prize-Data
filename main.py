@@ -316,4 +316,20 @@ def plot_age_boxplot():
     plt.ylabel('Age', fontsize=14)
     plt.savefig('images/age_boxplot.png')
     plt.show()
-plot_age_boxplot()
+
+#use lmplot to create 6 separate plots for the age of the winners by category
+def plot_age_category():
+    plt.figure(figsize=(8, 6), dpi=110)
+    sns.lmplot(data=df,
+            x='year',
+            y='winnig_age',
+            hue='category',
+            lowess=True,)
+    plt.title('Age of Nobel Prize Winners Over Time by Category', fontsize=18)
+    plt.xlabel('Year', fontsize=14)
+    plt.ylabel('Age', fontsize=14)
+    plt.savefig('images/age_category.png')
+    plt.show()
+
+
+plot_age_category()
