@@ -1,0 +1,72 @@
+Nobel Prize Analysis
+This project performs an analysis of Nobel Prize data, including various visualizations and statistical insights about the laureates, prize categories, countries, and organizations. The analysis explores trends over time, prize distributions, and demographic information about winners.
+
+Prerequisites
+To run this project, you'll need the following Python libraries:
+
+pandas
+matplotlib
+seaborn
+plotly
+numpy
+You can install these dependencies using pip:
+
+bash
+Copy
+pip install pandas matplotlib seaborn plotly numpy
+Data
+The data for this project is assumed to be in a CSV file named nobel_prize_data.csv. This file contains information about Nobel Prize laureates, including details like:
+
+Name of the laureate
+Year of the prize
+Category of the prize
+Birth country and city
+Organization (if applicable)
+Gender
+Prize share
+Project Overview
+The project includes multiple visualizations and analyses:
+
+Donut Chart of Men vs. Women Nobel Laureates: A chart showing the proportion of Nobel Prizes awarded to men vs. women.
+
+Top 20 Nobel Prize Categories: A bar chart showing the number of prizes awarded by category.
+
+Number of Prizes per Year: A line chart with a 5-year rolling average showing the number of Nobel Prizes awarded over time.
+
+Average Prize Share per Year: A line chart showing the average share of the prize awarded to laureates each year.
+
+Top 20 Countries by Nobel Prizes: A bar chart showing the top 20 countries with the most Nobel Prizes awarded.
+
+World Map of Nobel Prizes: A choropleth map visualizing the number of Nobel Prizes awarded by country.
+
+Cumulative Number of Prizes by Country Over Time: A line chart showing the cumulative number of prizes awarded by country over the years.
+
+Top 20 Organizations by Nobel Prizes: A bar chart showing the organizations that have the most Nobel Prizes affiliated with them.
+
+Top 20 Birth Cities by Nobel Laureates: A bar chart showing the birth cities of the top 20 Nobel Prize winners.
+
+Sunburst Chart of Organizations by Country, City, and Name: A sunburst chart showing the distribution of organizations by country and city.
+
+Distribution of Ages of Nobel Prize Winners:
+
+A histogram of the ages of laureates when they won their Nobel Prizes.
+A regression plot to show trends in the age of laureates over time.
+A boxplot showing the distribution of ages by category.
+A scatter plot for the age of winners by category over time.
+How to Run the Project
+Place the nobel_prize_data.csv file in the data/ directory (or update the file path accordingly).
+Run the Python script (main.py) to generate visualizations. You can run the script via the terminal or an IDE.
+bash
+Copy
+python main.py
+The script will generate and save several images in the images/ directory, and also display some interactive visualizations using Plotly.
+
+Results
+After running the script, you will see multiple outputs including:
+
+Graphs and charts showing trends in Nobel Prize awards.
+Insights into the distribution of prizes by gender, category, and country.
+A world map of Nobel Prizes awarded by country.
+A series of statistical insights into the demographics of Nobel laureates.
+Conclusion
+This analysis provides a comprehensive overview of the Nobel Prize data, offering insights into patterns and trends over the years, highlighting the demographic breakdown of winners, and giving a view of the countries and organizations most associated with Nobel Prizes.
