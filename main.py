@@ -303,4 +303,17 @@ def plot_age_regplot():
     plt.ylabel('Age', fontsize=14)
     plt.savefig('images/age_regplot.png')
     plt.show()
-plot_age_regplot()
+
+#use seaborn to create boxplot to see the distribution of the age of the winners
+def plot_age_boxplot():
+    plt.figure(figsize=(8, 4), dpi=110)
+    sns.boxplot(data=df,
+                x='category',
+                y='winnig_age',
+                color='green')
+    plt.title('Distribution of Age by Category', fontsize=18)
+    plt.xlabel('Category', fontsize=14)
+    plt.ylabel('Age', fontsize=14)
+    plt.savefig('images/age_boxplot.png')
+    plt.show()
+plot_age_boxplot()
