@@ -289,4 +289,18 @@ def plot_age_histogram():
     plt.ylabel('Number of Winners', fontsize=14)
     plt.savefig('images/age_histogram.png')
     plt.show()
-plot_age_histogram()
+#create a regplot by seaborn to see that if the age of laureates increase or decrease
+def plot_age_regplot():
+    plt.figure(figsize=(10, 4), dpi=115)
+    sns.regplot(data=df,
+                x='year',
+                y='winnig_age',
+                lowess=True,
+                scatter_kws={'alpha': 0.4},
+                line_kws={'color': 'red'})
+    plt.title('Age of Nobel Prize Winners Over Time', fontsize=18)
+    plt.xlabel('Year', fontsize=14)
+    plt.ylabel('Age', fontsize=14)
+    plt.savefig('images/age_regplot.png')
+    plt.show()
+plot_age_regplot()
