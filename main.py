@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import seaborn as sns
 import numpy as np
+import seaborn as sns
 
 
 df=pd.read_csv('data/nobel_prize_data.csv')
@@ -253,4 +254,39 @@ def plot_sunburst():
                                 title='Organizations by Country, City, and Name')
     sunburst_chart.update_layout(coloraxis_showscale=True)
     sunburst_chart.show()
-plot_sunburst()
+
+#calculate the age of laureate in the year of the ceremony
+df['winnig_age']=(df['year']-df['birth_date'].dt.year)
+#the oldest winner's age
+oldest_winner_age=df['winnig_age'].max()
+#the youngest winner's age
+youngest_winner_age=df['winnig_age'].min()
+#the name of oldest winner
+oldest_winner_name=df[df['winnig_age']==oldest_winner_age]['full_name'].values[0]
+print(f"Oldest winner is {oldest_winner_name} of age {oldest_winner_age}")
+#the name of youngest winner
+youngest_winner_name=df[df['winnig_age']==youngest_winner_age]['full_name'].values[0]
+print(f"Youngest winner is {youngest_winner_name} of age {youngest_winner_age}")
+#the category of oldest winner
+oldest_winner_category=df[df['winnig_age']==oldest_winner_age]['category'].values[0]
+print(f"Oldest winner category is {oldest_winner_category}")
+#the category of youngest winner
+youngest_winner_category=df[df['winnig_age']==youngest_winner_age]['category'].values[0]
+print(f"Youngest winner category is {youngest_winner_category}")
+#get the 75% of winner are younger than
+age_75_percentile=df['winnig_age'].quantile(0.75)
+print(f"there are 75% of winner are younger than {age_75_percentile}")
+#create a histogram of the age of the winners using seaborn
+def plot_age_histogram():
+    plt.figure(figsize=(8, 4), dpi=110)
+    sns.histplot(data=df,
+                x='winnig_age',
+                bins=30,
+                kde=True,
+                color='blue')
+    plt.title('Age of Nobel Prize Winners', fontsize=18)
+    plt.xlabel('Age', fontsize=14)
+    plt.ylabel('Number of Winners', fontsize=14)
+    plt.savefig('images/age_histogram.png')
+    plt.show()
+plot_age_histogram()
